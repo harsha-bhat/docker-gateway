@@ -1,0 +1,18 @@
+version: "2"
+services:
+  payment:
+    image: nginx
+    container_name: payment
+    ports:
+      - "8080:80"
+    labels:
+      - app_name=payment
+      - env=production
+  orders:
+    image: nginx
+    container_name: orders
+    ports:
+      - "8081:80"
+    labels:
+      - app_name=orders
+      - env=production
