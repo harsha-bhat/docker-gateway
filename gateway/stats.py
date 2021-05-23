@@ -1,6 +1,8 @@
 from tdigest import TDigest
 
 digest = TDigest()
+digest.update(0)
+
 requests = {
     "success": 0,
     "error": 0,

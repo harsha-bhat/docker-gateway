@@ -12,12 +12,6 @@ def _parse_labels(labels):
     return result
 
 
-def _get_containers():
-    """Get all running containers"""
-    client = docker.from_env()
-    return client.containers.list()
-
-
 def _match_labels(container_labels, filter_labels):
     """Match sets of labels with containers"""
     match = True
@@ -26,6 +20,12 @@ def _match_labels(container_labels, filter_labels):
             match = False
             break
     return match
+
+
+def _get_containers():
+    """Get all running containers"""
+    client = docker.from_env()
+    return client.containers.list()
 
 
 def _filter_container(containers, filter_labels):
