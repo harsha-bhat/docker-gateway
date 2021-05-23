@@ -4,6 +4,7 @@ from .logging import logger
 
 
 def _parse_labels(labels):
+    """Convert string labels into a dictionary"""
     result = {}
     for label in labels:
         key, value = label.split("=")
@@ -12,11 +13,13 @@ def _parse_labels(labels):
 
 
 def _get_containers():
+    """Get all running containers"""
     client = docker.from_env()
     return client.containers.list()
 
 
 def _match_labels(container_labels, filter_labels):
+    """Match sets of labels with containers"""
     match = True
     for key in filter_labels:
         if key not in container_labels or container_labels[key] != filter_labels[key]:
@@ -26,6 +29,7 @@ def _match_labels(container_labels, filter_labels):
 
 
 def _filter_container(containers, filter_labels):
+    """Filter containers with selected labels"""
     for container in containers:
         if _match_labels(container.labels, filter_labels):
             return container
@@ -33,6 +37,7 @@ def _filter_container(containers, filter_labels):
 
 
 def _container_config(container):
+    """Get container configuration"""
     config = {}
     if container:
         for port_map in container.ports.values():
@@ -43,6 +48,7 @@ def _container_config(container):
 
 
 def get_backend_details(config):
+    """Get container backends for the given config"""
     backends = {}
 
     containers = _get_containers()

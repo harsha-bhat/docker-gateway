@@ -4,7 +4,7 @@ services:
     image: nginx
     container_name: payment
     ports:
-      - "8080:80"
+      - "8001:80"
     labels:
       - app_name=payment
       - env=production
@@ -12,7 +12,7 @@ services:
     image: nginx
     container_name: orders
     ports:
-      - "8081:80"
+      - "8002:80"
     labels:
       - app_name=orders
       - env=production

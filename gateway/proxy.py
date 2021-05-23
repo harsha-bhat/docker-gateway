@@ -1,6 +1,7 @@
 import requests
 from flask import request, Response
 
+from . import stats
 from .logging import logger
 
 PROTOCOL = "http://"
@@ -14,6 +15,8 @@ EXCLUDE_HEADERS = [
 
 
 def create_proxy(app, prefix, name, backend):
+    """Create a proxy route to respective backend container"""
+
     def proxy(*args, **kwargs):
         try:
             resp = requests.request(
@@ -36,10 +39,12 @@ def create_proxy(app, prefix, name, backend):
             ]
 
             response = Response(resp.content, resp.status_code, headers)
-
+            stats.update_time(resp.elapsed.total_seconds() * 1000)
+            stats.update_success()
         except:
             logger.error(f"Service unavailable: {name}")
             response = Response("Service Unavailable", 503)
+            stats.update_error()
 
         return response
 

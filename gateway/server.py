@@ -7,9 +7,10 @@ from .logging import logger
 
 
 @click.command()
-@click.option("--port", default=8000)
-@click.option("--config", default="config.yml")
+@click.option("--port", default=8080, type=int)
+@click.option("--config", required=True, type=str)
 def run(port, config):
+    """Starts the server"""
     logger.info(f"Loading config file: {config}")
     settings = load_config(config)
 
