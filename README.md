@@ -35,6 +35,8 @@ apt-get install libev-dev
 
 ### Installation
 
+Create a [virtualenv](https://pypi.org/project/virtualenv/) and activate it.
+
 Run this command to install the python dependencies and the rgate CLI.
 
 ```
@@ -84,8 +86,8 @@ rgate --config config.yml --port 8080
 
 ### Testing
 
-Run tests with pylint.
+Run tests with pytest.
 
 ```
-pylint
+pytest
 ```
