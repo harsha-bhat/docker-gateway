@@ -3,6 +3,8 @@ from flask import request, Response
 
 from . import stats
 from .logging import logger
+from .backend import get_backend_details
+from gateway import logging
 
 PROTOCOL = "http://"
 METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE"]
@@ -14,11 +16,13 @@ EXCLUDE_HEADERS = [
 ]
 
 
-def create_proxy(app, prefix, name, backend):
+def create_proxy(app, prefix, name, backend_config):
     """Create a proxy route to respective backend container"""
 
     def proxy(*args, **kwargs):
         try:
+            backend = get_backend_details(backend_config, name)
+
             resp = requests.request(
                 method=request.method,
                 url=request.url.replace(
@@ -41,8 +45,9 @@ def create_proxy(app, prefix, name, backend):
             response = Response(resp.content, resp.status_code, headers)
             stats.update_time(resp.elapsed.total_seconds() * 1000)
             stats.update_success()
-        except:
+        except Exception as e:
             logger.error(f"Service unavailable: {name}")
+            logger.error(e)
             response = Response("Service Unavailable", 503)
             stats.update_error()
 

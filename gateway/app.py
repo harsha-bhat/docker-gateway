@@ -8,7 +8,6 @@ from . import stats
 def create_app(config):
     """Create flask app"""
     app = Flask(__name__)
-    backends = get_backend_details(config["backends"])
     routes = config["routes"]
 
     @app.route("/")
@@ -16,9 +15,7 @@ def create_app(config):
         return "<p>Gateway Service Running</p>"
 
     for route in routes:
-        create_proxy(
-            app, route["path_prefix"], route["backend"], backends[route["backend"]]
-        )
+        create_proxy(app, route["path_prefix"], route["backend"], config["backends"])
 
     @app.errorhandler(404)
     def route_not_found(e):

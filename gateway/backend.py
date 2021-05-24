@@ -47,23 +47,22 @@ def _container_config(container):
     return config
 
 
-def get_backend_details(config):
+def get_backend_details(config, name):
     """Get container backends for the given config"""
     backends = {}
 
     containers = _get_containers()
 
     for backend in config:
-        name = backend["name"]
         labels = _parse_labels(backend["match_labels"])
         container = _filter_container(containers, labels)
-        backends[name] = _container_config(container)
+        backends[backend["name"]] = _container_config(container)
 
-        if backends[name]:
-            logger.info(
-                f"Backend {name} - {backends[name]['host']}:{backends[name]['port']}"
-            )
-        else:
-            logger.error(f"Backend not found - {name}")
+    if backends[name]:
+        logger.info(
+            f"Backend {name} - {backends[name]['host']}:{backends[name]['port']}"
+        )
+    else:
+        logger.error(f"Backend not found - {name}")
 
-    return backends
+    return backends[name]
