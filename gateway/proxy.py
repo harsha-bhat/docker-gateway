@@ -4,7 +4,6 @@ from flask import request, Response
 from . import stats
 from .logging import logger
 from .backend import get_backend_details
-from gateway import logging
 
 PROTOCOL = "http://"
 METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE"]

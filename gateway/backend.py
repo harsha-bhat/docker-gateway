@@ -1,6 +1,13 @@
 import docker
+from cachetools import TTLCache
 
 from .logging import logger
+
+# Cache the response from the docker daemon for CACHE_TTL seconds
+CACHE_TTL = 60
+CACHE_SIZE = 128
+
+cache = TTLCache(CACHE_SIZE, CACHE_TTL)
 
 
 def _parse_labels(labels):
@@ -49,6 +56,9 @@ def _container_config(container):
 
 def get_backend_details(config, name):
     """Get container backends for the given config"""
+    if name in cache:
+        return cache[name]
+
     backends = {}
 
     containers = _get_containers()
@@ -65,4 +75,5 @@ def get_backend_details(config, name):
     else:
         logger.error(f"Backend not found - {name}")
 
+    cache[name] = backends[name]
     return backends[name]

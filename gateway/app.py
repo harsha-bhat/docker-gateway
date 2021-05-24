@@ -1,6 +1,5 @@
 from flask import Flask
 
-from .backend import get_backend_details
 from .proxy import create_proxy
 from . import stats
 
